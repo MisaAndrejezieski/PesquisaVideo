@@ -9,8 +9,7 @@ logging.basicConfig(
     filename='automacao_video.log',
     level=logging.INFO,
     format='%(asctime)s - %(levelname)s - %(message)s',
-    encoding='utf-8'
-)
+    encoding='utf-8')
 
 # Lista de vídeos do canal (URL dos vídeos)
 videos = [
@@ -37,17 +36,17 @@ def trocar_ip():
         logging.error(f"Erro ao trocar IP: {e}")
         return False
 
-def abrir_tor():
+def abrir_chrome():
     try:
-        # Abre o navegador Tor
+        # Abre o navegador Chrome
         pyautogui.press('win')
-        pyautogui.write('Tor Browser')
+        pyautogui.write('Google Chrome')
         pyautogui.press('enter')
         time.sleep(5)  # Espera o navegador abrir
-        notificar_usuario("Navegador Tor aberto com sucesso!")
+        notificar_usuario("Navegador Chrome aberto com sucesso!")
         return True
     except Exception as e:
-        logging.error(f"Erro ao abrir o Tor: {e}")
+        logging.error(f"Erro ao abrir o Chrome: {e}")
         return False
 
 def realizar_pesquisa(url):
@@ -57,7 +56,6 @@ def realizar_pesquisa(url):
         pyautogui.write(url)  # Escreve a URL do vídeo
         pyautogui.press('enter')
         time.sleep(TEMPO_ESPERA)
-
         # Dá play no vídeo com o atalho 'k'
         pyautogui.press('k')
         notificar_usuario(f"Vídeo encontrado e iniciado: {url}")
@@ -109,14 +107,14 @@ def executar_automacao(num_videos=100):
         if verificar_conectividade():
             for _ in range(num_videos):
                 if trocar_ip():
-                    if abrir_tor():
+                    if abrir_chrome():
                         video_url = random.choice(videos)
                         realizar_pesquisa(video_url)
                         time.sleep(video_duration)
                         fechar_navegador()
                         limpar_dados_navegacao()
                     else:
-                        logging.error("Não foi possível abrir o navegador Tor.")
+                        logging.error("Não foi possível abrir o navegador Chrome.")
                 else:
                     logging.error("Não foi possível trocar o IP.")
         else:
