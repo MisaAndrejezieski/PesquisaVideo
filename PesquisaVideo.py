@@ -9,7 +9,8 @@ logging.basicConfig(
     filename='automacao_video.log',
     level=logging.INFO,
     format='%(asctime)s - %(levelname)s - %(message)s',
-    encoding='utf-8')
+    encoding='utf-8'
+)
 
 # Lista de vídeos do canal (URL dos vídeos)
 videos = [
@@ -57,10 +58,9 @@ def realizar_pesquisa(url):
         pyautogui.press('enter')
         time.sleep(TEMPO_ESPERA)
         # Dá play no vídeo com o atalho 'k'
-        # pyautogui.press('k')
+        pyautogui.press('k')
         notificar_usuario(f"Vídeo encontrado e iniciado: {url}")
     except Exception as e:
-        
         logging.error(f"Erro ao realizar a pesquisa: {e}")
 
 def limpar_dados_navegacao():
@@ -123,4 +123,3 @@ def executar_automacao(num_videos=100):
         break
 
 executar_automacao()
-
