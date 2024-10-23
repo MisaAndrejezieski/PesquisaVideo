@@ -58,9 +58,10 @@ def realizar_pesquisa(url):
         time.sleep(TEMPO_ESPERA)
         # Dá play no vídeo com o atalho 'k'
         # pyautogui.press('k')
-        # notificar_usuario(f"Vídeo encontrado e iniciado: {url}")
-    # except Exception as e:
-        # logging.error(f"Erro ao realizar a pesquisa: {e}")
+        notificar_usuario(f"Vídeo encontrado e iniciado: {url}")
+    except Exception as e:
+        
+        logging.error(f"Erro ao realizar a pesquisa: {e}")
 
 def limpar_dados_navegacao():
     try:
