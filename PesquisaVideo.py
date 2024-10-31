@@ -1,18 +1,8 @@
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+import logging
+import pyautogui
+import requests
+import time
+import random
 
 # Configuração de logging
 logging.basicConfig(
@@ -32,24 +22,25 @@ videos = [
 TEMPO_ESPERA = 5
 
 def notificar_usuario(mensagem):
+    """Exibe uma notificação ao usuário e registra a mensagem."""
     print(mensagem)
     logging.info(mensagem)
-    pyautogui.alert(text=mensagem, title='Notificação', timeout=2)  # Notificação sem necessidade de confirmação
+    pyautogui.alert(text=mensagem, title='Notificação', timeout=2)
 
 def trocar_ip():
+    """Troca o IP usando um serviço de proxy ou VPN."""
     try:
-        # Substitua pelo seu código de troca de IP, como usar uma API de proxy
-        # ou um serviço VPN.
-        # ...
-        notificar_usuario(f"IP trocado com sucesso!")
+        # Aqui você deve implementar a lógica para trocar o IP
+        # Exemplo: usar uma API de proxy ou um serviço VPN.
+        notificar_usuario("IP trocado com sucesso!")
         return True
     except Exception as e:
         logging.error(f"Erro ao trocar IP: {e}")
         return False
 
 def abrir_chrome():
+    """Abre o navegador Google Chrome."""
     try:
-        # Abre o navegador Chrome
         pyautogui.press('win')
         pyautogui.write('Google Chrome')
         pyautogui.press('enter')
@@ -61,19 +52,20 @@ def abrir_chrome():
         return False
 
 def realizar_pesquisa(url):
+    """Realiza a pesquisa do vídeo no YouTube."""
     try:
         pyautogui.hotkey('ctrl', 't')  # Abre uma nova aba
         time.sleep(TEMPO_ESPERA)
         pyautogui.write(url)  # Escreve a URL do vídeo
         pyautogui.press('enter')
         time.sleep(TEMPO_ESPERA)
-        # Dá play no vídeo com o atalho 'k'
-        pyautogui.press('k')
+        pyautogui.press('k')  # Dá play no vídeo
         notificar_usuario(f"Vídeo encontrado e iniciado: {url}")
     except Exception as e:
         logging.error(f"Erro ao realizar a pesquisa: {e}")
 
 def limpar_dados_navegacao():
+    """Limpa os dados de navegação e cookies do navegador."""
     try:
         pyautogui.hotkey('ctrl', 'shift', 'delete')
         time.sleep(2)
@@ -84,6 +76,7 @@ def limpar_dados_navegacao():
         logging.error(f"Erro ao limpar os dados de navegação: {e}")
 
 def fechar_navegador():
+    """Fecha o navegador."""
     try:
         pyautogui.hotkey('alt', 'f4')
         notificar_usuario("Navegador fechado com sucesso.")
@@ -91,6 +84,7 @@ def fechar_navegador():
         logging.error(f"Erro ao fechar o navegador: {e}")
 
 def verificar_conectividade():
+    """Verifica a conectividade com a internet."""
     try:
         response = requests.get('https://www.google.com', timeout=5)
         if response.status_code == 200:
@@ -104,6 +98,7 @@ def verificar_conectividade():
         return False
 
 def solicitar_duracao_video():
+    """Solicita ao usuário a duração do vídeo em segundos."""
     try:
         duration_str = pyautogui.prompt(text='Por favor, insira a duração do vídeo em segundos:', title='Duração do Vídeo', default='300')
         return int(duration_str)
@@ -112,6 +107,7 @@ def solicitar_duracao_video():
         return 300  # Valor padrão
 
 def executar_automacao(num_videos=100):
+    """Executa a automação para assistir vídeos no YouTube."""
     video_duration = solicitar_duracao_video()
     while True:
         notificar_usuario('O código de automação para assistir vídeos no YouTube vai começar...')
