@@ -1,8 +1,18 @@
-import time
-import pyautogui
-import random
-import logging
-import requests
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 # Configuração de logging
 logging.basicConfig(
