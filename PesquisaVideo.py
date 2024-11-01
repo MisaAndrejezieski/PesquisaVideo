@@ -12,7 +12,7 @@ logging.basicConfig(
     encoding='utf-8'
 )
 
-# Lista de vídeos do canal (URL dos vídeos)meu Deus que coisa
+# Lista de vídeos do canal (URL dos vídeos)
 videos = [
     'https://youtu.be/Ed8OnrNFWe0'
     # Adicione mais URLs dos vídeos aqui
