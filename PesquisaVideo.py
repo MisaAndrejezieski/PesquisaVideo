@@ -15,7 +15,6 @@ logging.basicConfig(
 # Lista de vídeos do canal (URL dos vídeos)
 videos = [
     'https://www.youtube.com/shorts/yRMN-ymQReE'
-    
     # Adicione mais URLs dos vídeos aqui
 ]
 
@@ -60,7 +59,10 @@ def realizar_pesquisa(url):
         pyautogui.write(url)  # Escreve a URL do vídeo
         pyautogui.press('enter')
         time.sleep(TEMPO_ESPERA)
-        pyautogui.press('k')  # Dá play no vídeo
+        
+        # Esperar o vídeo carregar e dar play
+        time.sleep(5)
+        pyautogui.click(900, 500)  # Ajuste as coordenadas se necessário para o botão de play
         notificar_usuario(f"Vídeo encontrado e iniciado: {url}")
     except Exception as e:
         logging.error(f"Erro ao realizar a pesquisa: {e}")
