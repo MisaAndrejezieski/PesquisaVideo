@@ -18,6 +18,31 @@ videos = [
     # Adicione mais URLs dos vídeos aqui
 ]
 
+# Lista de proxies
+proxy_list = [
+    'http://103.191.218.153:8080',
+    'http://85.117.56.151:8080',
+    'http://103.155.246.180:8081',
+    'http://103.76.149.198:8082',
+    'http://103.230.49.132:8080',
+    'http://157.20.157.4:8080',
+    'http://51.255.20.138:80',
+    'http://103.127.1.130:80',
+    'http://113.160.132.195:8080',
+    'http://31.210.50.227:8081',
+    'http://179.104.70.12:8080',
+    'http://14.177.236.212:55443',
+    'http://200.49.242.18:8080',
+    'http://177.93.60.70:999',
+    'http://101.109.50.148:8080',
+    'http://148.72.165.7:30127',
+    'http://72.10.160.91:8167',
+    'http://34.100.189.30:8561',
+    'http://94.19.0.131:80',
+    'http://47.88.59.79:82',
+    'http://147.139.208.214:8080'
+]
+
 # Define o tempo de espera padrão (em segundos) entre cada ação
 TEMPO_ESPERA = 5
 
@@ -28,12 +53,22 @@ def notificar_usuario(mensagem):
     pyautogui.alert(text=mensagem, title='Notificação', timeout=2)
 
 def trocar_ip():
-    """Troca o IP usando um serviço de proxy ou VPN."""
+    """Troca o IP usando um serviço de proxy."""
     try:
-        # Aqui você deve implementar a lógica para trocar o IP
-        # Exemplo: usar uma API de proxy ou um serviço VPN.
-        notificar_usuario("IP trocado com sucesso!")
-        return True
+        proxy = random.choice(proxy_list)
+        
+        proxies = {
+            'http': proxy,
+            'https': proxy
+        }
+        
+        response = requests.get('https://www.google.com', proxies=proxies)
+        if response.status_code == 200:
+            notificar_usuario(f"IP trocado com sucesso! Usando proxy: {proxy}")
+            return True
+        else:
+            logging.error("Falha ao trocar o IP usando proxy.")
+            return False
     except Exception as e:
         logging.error(f"Erro ao trocar IP: {e}")
         return False
