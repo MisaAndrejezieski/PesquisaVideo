@@ -35,17 +35,18 @@ def trocar_ip():
         with Controller.from_port(port=9051) as controller:
             controller.authenticate(password='your_password')  # Substitua 'your_password' pela senha do Tor configurada
             controller.signal(Signal.NEWNYM)
+            time.sleep(5)  # Espera para garantir que o IP tenha sido trocado
         proxies = {
             'http': 'socks5h://127.0.0.1:9050',
             'https': 'socks5h://127.0.0.1:9050'
         }
         
-        response = requests.get('https://www.google.com', proxies=proxies)
+        response = requests.get('https://www.google.com', proxies=proxies, timeout=10)
         if response.status_code == 200:
             notificar_usuario("IP trocado com sucesso usando Tor!")
             return True
         else:
-            logging.error("Falha ao trocar o IP usando Tor.")
+            logging.error("Falha ao trocar o IP usando Tor. Status code: {}".format(response.status_code))
             return False
     except Exception as e:
         logging.error(f"Erro ao trocar IP usando Tor: {e}")
@@ -106,12 +107,12 @@ def verificar_conectividade():
             'http': 'socks5h://127.0.0.1:9050',
             'https': 'socks5h://127.0.0.1:9050'
         }
-        response = requests.get('https://www.google.com', proxies=proxies, timeout=5)
+        response = requests.get('https://www.google.com', proxies=proxies, timeout=10)
         if response.status_code == 200:
             notificar_usuario("Conectividade com a internet verificada.")
             return True
         else:
-            logging.error("Falha na verificação de conectividade com a internet.")
+            logging.error("Falha na verificação de conectividade com a internet. Status code: {}".format(response.status_code))
             return False
     except requests.ConnectionError as e:
         logging.error(f"Erro ao verificar a conectividade com a internet: {e}")
