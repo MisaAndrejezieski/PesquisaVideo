@@ -59,3 +59,6 @@
 2024-11-02 16:54:09,423 - ERROR - Erro ao trocar IP: HTTPSConnectionPool(host='www.google.com', port=443): Max retries exceeded with url: / (Caused by ProxyError('Unable to connect to proxy', ConnectTimeoutError(<urllib3.connection.HTTPSConnection object at 0x000001606681C230>, 'Connection to 147.139.208.214 timed out. (connect timeout=None)')))
 2024-11-02 16:54:09,423 - ERROR - Não foi possível trocar o IP.
 2024-11-02 17:04:51,286 - INFO - O código de automação para assistir vídeos no YouTube vai começar...
+2024-11-02 17:06:45,692 - INFO - O código de automação para assistir vídeos no YouTube vai começar...
+2024-11-02 17:06:47,893 - ERROR - Erro ao verificar a conectividade com a internet: SOCKSHTTPSConnectionPool(host='www.google.com', port=443): Max retries exceeded with url: / (Caused by NewConnectionError('<urllib3.contrib.socks.SOCKSHTTPSConnection object at 0x0000022EFB967230>: Failed to establish a new connection: [WinError 10061] Nenhuma conexão pôde ser feita porque a máquina de destino as recusou ativamente'))
+2024-11-02 17:06:47,893 - INFO - Não foi possível verificar a conectividade com a internet.
