@@ -33,7 +33,7 @@ def trocar_ip():
     """Troca o IP usando a rede Tor."""
     try:
         with Controller.from_port(port=9051) as controller:
-            controller.authenticate(password='your_password')
+            controller.authenticate(password='your_password')  # Substitua 'your_password' pela senha do Tor configurada
             controller.signal(Signal.NEWNYM)
         proxies = {
             'http': 'socks5h://127.0.0.1:9050',
