@@ -14,7 +14,7 @@ logging.basicConfig(
 
 # Lista de vídeos do canal (URL dos vídeos)
 videos = [
-    'https://youtu.be/Ed8OnrNFWe0'
+    'https://www.youtube.com/shorts/yRMN-ymQReE'
     # Adicione mais URLs dos vídeos aqui
 ]
 
