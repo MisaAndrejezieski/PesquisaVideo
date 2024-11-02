@@ -47,3 +47,14 @@
 2024-11-02 16:51:36,237 - INFO - IP trocado com sucesso! Usando proxy: http://200.49.242.18:8080
 2024-11-02 16:51:41,662 - INFO - Navegador Chrome aberto com sucesso!
 2024-11-02 16:51:57,204 - INFO - Vídeo encontrado e iniciado: https://www.youtube.com/shorts/yRMN-ymQReE
+2024-11-02 16:52:39,688 - INFO - O código de automação para assistir vídeos no YouTube vai começar...
+2024-11-02 16:52:40,310 - INFO - Conectividade com a internet verificada.
+2024-11-02 16:52:44,275 - INFO - IP trocado com sucesso! Usando proxy: http://101.109.50.148:8080
+2024-11-02 16:52:49,704 - INFO - Navegador Chrome aberto com sucesso!
+2024-11-02 16:53:05,241 - INFO - Vídeo encontrado e iniciado: https://www.youtube.com/shorts/yRMN-ymQReE
+2024-11-02 16:53:15,475 - INFO - Navegador fechado com sucesso.
+2024-11-02 16:53:19,856 - INFO - Dados de navegação e cookies limpos com sucesso.
+2024-11-02 16:53:48,348 - ERROR - Erro ao trocar IP: HTTPSConnectionPool(host='www.google.com', port=443): Max retries exceeded with url: / (Caused by SSLError(SSLCertVerificationError(1, '[SSL: CERTIFICATE_VERIFY_FAILED] certificate verify failed: self-signed certificate in certificate chain (_ssl.c:1000)')))
+2024-11-02 16:53:48,348 - ERROR - Não foi possível trocar o IP.
+2024-11-02 16:54:09,423 - ERROR - Erro ao trocar IP: HTTPSConnectionPool(host='www.google.com', port=443): Max retries exceeded with url: / (Caused by ProxyError('Unable to connect to proxy', ConnectTimeoutError(<urllib3.connection.HTTPSConnection object at 0x000001606681C230>, 'Connection to 147.139.208.214 timed out. (connect timeout=None)')))
+2024-11-02 16:54:09,423 - ERROR - Não foi possível trocar o IP.
