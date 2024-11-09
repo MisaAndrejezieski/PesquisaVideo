@@ -3,8 +3,6 @@ import pyautogui
 import requests
 import time
 import random
-from stem import Signal
-from stem.control import Controller
 
 # Configuração de logging
 logging.basicConfig(
@@ -16,7 +14,7 @@ logging.basicConfig(
 
 # Lista de vídeos do canal (URL dos vídeos)
 videos = [
-    'https://www.youtube.com/shorts/yRMN-ymQReE'
+    'https://www.xvideos.com/video.ummkmbaca66/cannoball_-_os_criadores'
     # Adicione mais URLs dos vídeos aqui
 ]
 
@@ -28,29 +26,6 @@ def notificar_usuario(mensagem):
     print(mensagem)
     logging.info(mensagem)
     pyautogui.alert(text=mensagem, title='Notificação', timeout=2)
-
-def trocar_ip():
-    """Troca o IP usando a rede Tor."""
-    try:
-        with Controller.from_port(port=9051) as controller:
-            controller.authenticate(password='your_password')  # Substitua 'your_password' pela senha do Tor configurada
-            controller.signal(Signal.NEWNYM)
-            time.sleep(5)  # Espera para garantir que o IP tenha sido trocado
-        proxies = {
-            'http': 'socks5h://127.0.0.1:9050',
-            'https': 'socks5h://127.0.0.1:9050'
-        }
-        
-        response = requests.get('https://www.google.com', proxies=proxies, timeout=10)
-        if response.status_code == 200:
-            notificar_usuario("IP trocado com sucesso usando Tor!")
-            return True
-        else:
-            logging.error("Falha ao trocar o IP usando Tor. Status code: {}".format(response.status_code))
-            return False
-    except Exception as e:
-        logging.error(f"Erro ao trocar IP usando Tor: {e}")
-        return False
 
 def abrir_chrome():
     """Abre o navegador Google Chrome."""
@@ -66,7 +41,7 @@ def abrir_chrome():
         return False
 
 def realizar_pesquisa(url):
-    """Realiza a pesquisa do vídeo no YouTube."""
+    """Realiza a pesquisa do vídeo no navegador."""
     try:
         pyautogui.hotkey('ctrl', 't')  # Abre uma nova aba
         time.sleep(TEMPO_ESPERA)
@@ -100,24 +75,6 @@ def fechar_navegador():
     except Exception as e:
         logging.error(f"Erro ao fechar o navegador: {e}")
 
-def verificar_conectividade():
-    """Verifica a conectividade com a internet."""
-    try:
-        proxies = {
-            'http': 'socks5h://127.0.0.1:9050',
-            'https': 'socks5h://127.0.0.1:9050'
-        }
-        response = requests.get('https://www.google.com', proxies=proxies, timeout=10)
-        if response.status_code == 200:
-            notificar_usuario("Conectividade com a internet verificada.")
-            return True
-        else:
-            logging.error("Falha na verificação de conectividade com a internet. Status code: {}".format(response.status_code))
-            return False
-    except requests.ConnectionError as e:
-        logging.error(f"Erro ao verificar a conectividade com a internet: {e}")
-        return False
-
 def solicitar_duracao_video():
     """Solicita ao usuário a duração do vídeo em segundos."""
     try:
@@ -130,23 +87,17 @@ def solicitar_duracao_video():
 def executar_automacao(num_videos=100):
     """Executa a automação para assistir vídeos no YouTube."""
     video_duration = solicitar_duracao_video()
-    while True:
-        notificar_usuario('O código de automação para assistir vídeos no YouTube vai começar...')
-        if verificar_conectividade():
-            for _ in range(num_videos):
-                if trocar_ip():
-                    if abrir_chrome():
-                        video_url = random.choice(videos)
-                        realizar_pesquisa(video_url)
-                        time.sleep(video_duration)
-                        fechar_navegador()
-                        limpar_dados_navegacao()
-                    else:
-                        logging.error("Não foi possível abrir o navegador Chrome.")
-                else:
-                    logging.error("Não foi possível trocar o IP.")
+    notificar_usuario('O código de automação para assistir vídeos no YouTube vai começar...')
+    
+    for _ in range(num_videos):
+        if abrir_chrome():
+            video_url = random.choice(videos)
+            realizar_pesquisa(video_url)
+            time.sleep(video_duration)
+            fechar_navegador()
+            limpar_dados_navegacao()
         else:
-            notificar_usuario("Não foi possível verificar a conectividade com a internet.")
-        break
+            logging.error("Não foi possível abrir o navegador Chrome.")
+            break
 
 executar_automacao()
