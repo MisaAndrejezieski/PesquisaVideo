@@ -65,3 +65,7 @@
 2024-11-02 17:08:29,999 - INFO - O código de automação para assistir vídeos no YouTube vai começar...
 2024-11-02 17:08:32,165 - ERROR - Erro ao verificar a conectividade com a internet: SOCKSHTTPSConnectionPool(host='www.google.com', port=443): Max retries exceeded with url: / (Caused by NewConnectionError('<urllib3.contrib.socks.SOCKSHTTPSConnection object at 0x000001830B231DC0>: Failed to establish a new connection: [WinError 10061] Nenhuma conexão pôde ser feita porque a máquina de destino as recusou ativamente'))
 2024-11-02 17:08:32,166 - INFO - Não foi possível verificar a conectividade com a internet.
+2024-11-09 18:02:51,943 - ERROR - Erro ao solicitar a duração do vídeo: int() argument must be a string, a bytes-like object or a real number, not 'NoneType'
+2024-11-09 18:02:51,958 - INFO - O código de automação para assistir vídeos no YouTube vai começar...
+2024-11-09 18:02:56,079 - ERROR - Erro ao verificar a conectividade com a internet: SOCKSHTTPSConnectionPool(host='www.google.com', port=443): Max retries exceeded with url: / (Caused by NewConnectionError('<urllib3.contrib.socks.SOCKSHTTPSConnection object at 0x000001C600135FA0>: Failed to establish a new connection: [WinError 10061] Nenhuma conexão pôde ser feita porque a máquina de destino as recusou ativamente'))
+2024-11-09 18:02:56,079 - INFO - Não foi possível verificar a conectividade com a internet.
