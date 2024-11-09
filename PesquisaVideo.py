@@ -1,8 +1,8 @@
 import logging
 import pyautogui
-import requests
 import time
 import random
+import subprocess
 
 # Configuração de logging
 logging.basicConfig(
@@ -30,9 +30,8 @@ def notificar_usuario(mensagem):
 def abrir_chrome():
     """Abre o navegador Google Chrome."""
     try:
-        pyautogui.press('win')
-        pyautogui.write('Google Chrome')
-        pyautogui.press('enter')
+        # Usando subprocess para abrir o Chrome
+        subprocess.Popen(['C:/Program Files/Google/Chrome/Application/chrome.exe'])
         time.sleep(5)  # Espera o navegador abrir
         notificar_usuario("Navegador Chrome aberto com sucesso!")
         return True
