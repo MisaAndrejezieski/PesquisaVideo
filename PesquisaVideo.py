@@ -25,7 +25,6 @@ def notificar_usuario(mensagem):
     """Exibe uma notificação ao usuário e registra a mensagem."""
     print(mensagem)
     logging.info(mensagem)
-    pyautogui.alert(text=mensagem, title='Notificação', timeout=2)
 
 def abrir_chrome():
     """Abre o navegador Google Chrome."""
@@ -55,16 +54,9 @@ def realizar_pesquisa(url):
     except Exception as e:
         logging.error(f"Erro ao realizar a pesquisa: {e}")
 
-def limpar_dados_navegacao():
-    """Limpa os dados de navegação e cookies do navegador."""
-    try:
-        pyautogui.hotkey('ctrl', 'shift', 'delete')
-        time.sleep(2)
-        pyautogui.press('enter')
-        time.sleep(2)
-        notificar_usuario("Dados de navegação e cookies limpos com sucesso.")
-    except Exception as e:
-        logging.error(f"Erro ao limpar os dados de navegação: {e}")
+def minimizar_navegador():
+    """Minimiza a janela do navegador."""
+    pyautogui.hotkey('win', 'd')  # Minimiza todas as janelas
 
 def fechar_navegador():
     """Fecha o navegador."""
@@ -77,8 +69,8 @@ def fechar_navegador():
 def solicitar_duracao_video():
     """Solicita ao usuário a duração do vídeo em segundos."""
     try:
-        duration_str = pyautogui.prompt(text='Por favor, insira a duração do vídeo em segundos:', title='Duração do Vídeo', default='300')
-        return int(duration_str)
+        duration_str = input('Por favor, insira a duração do vídeo em segundos (default 300): ')
+        return int(duration_str) if duration_str else 300  # Valor padrão
     except Exception as e:
         logging.error(f"Erro ao solicitar a duração do vídeo: {e}")
         return 300  # Valor padrão
@@ -93,8 +85,9 @@ def executar_automacao(num_videos=100):
             video_url = random.choice(videos)
             realizar_pesquisa(video_url)
             time.sleep(video_duration)
+            minimizar_navegador()  # Minimiza o navegador
+            time.sleep(5)  # Espera um pouco antes de fechar
             fechar_navegador()
-            limpar_dados_navegacao()
         else:
             logging.error("Não foi possível abrir o navegador Chrome.")
             break
