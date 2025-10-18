@@ -21,7 +21,7 @@ logging.basicConfig(
 
 # Lista de vídeos (URLs)
 videos = [
-    'https://www.youtube.com/watch?v=fxvkI9MTQw4',
+    'https://www.youtube.com/watch?v=H6SZuAcqeW8&list=RDH6SZuAcqeW8&start_radio=1',
     # Adicione mais URLs aqui, se desejar
 ]
 

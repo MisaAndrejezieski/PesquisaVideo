@@ -108,3 +108,8 @@
 2025-10-18 20:30:38,735 - INFO - Navegador Chrome aberto com sucesso.
 2025-10-18 20:30:38,735 - INFO - Iniciando vídeo 1/5: https://www.youtube.com/watch?v=fxvkI9MTQw4
 2025-10-18 20:30:44,065 - INFO - Acessando: https://www.youtube.com/watch?v=fxvkI9MTQw4
+2025-10-18 20:47:49,549 - INFO - Iniciando automação de visualização de vídeos...
+2025-10-18 20:47:54,577 - INFO - Navegador Chrome aberto com sucesso.
+2025-10-18 20:47:54,577 - INFO - Iniciando vídeo 1/5: https://www.youtube.com/watch?v=H6SZuAcqeW8&list=RDH6SZuAcqeW8&start_radio=1
+2025-10-18 20:47:59,922 - INFO - Acessando: https://www.youtube.com/watch?v=H6SZuAcqeW8&list=RDH6SZuAcqeW8&start_radio=1
+2025-10-18 20:48:09,923 - ERROR - Erro ao realizar a pesquisa: PyAutoGUI was unable to import pyscreeze. (This is likely because you're running a version of Python that Pillow (which pyscreeze depends on) doesn't support currently.) Please install this module to enable the function you tried to call.
