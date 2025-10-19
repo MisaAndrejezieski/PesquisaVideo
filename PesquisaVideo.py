@@ -11,7 +11,6 @@ import sys
 # CONFIGURAÇÕES GERAIS
 # ===========================================
 
-# Configuração de logging (registra as ações no arquivo de log)
 logging.basicConfig(
     filename='automacao_video.log',
     level=logging.INFO,
@@ -19,138 +18,157 @@ logging.basicConfig(
     encoding='utf-8'
 )
 
-# Lista de vídeos (URLs)
 videos = [
-    'https://www.youtube.com/watch?v=H6SZuAcqeW8&list=RDH6SZuAcqeW8&start_radio=1',
-    # Adicione mais URLs aqui, se desejar
+    'https://www.youtube.com/watch?v=H6SZuAcqeW8',
 ]
 
-# Define o tempo de espera padrão (em segundos)
 TEMPO_ESPERA = 5
-
-# Ativa o modo de segurança do PyAutoGUI:
-# mover o mouse para o canto superior esquerdo interrompe o script.
 pyautogui.FAILSAFE = True
-
 
 # ===========================================
 # FUNÇÕES DE APOIO
 # ===========================================
 
-def notificar_usuario(mensagem):
-    """Exibe e registra mensagens no console e no log."""
-    print(mensagem)
-    logging.info(mensagem)
-
+def logar(mensagem, tipo="info"):
+    """Exibe no console e grava no log."""
+    cores = {"ok": "\033[92m", "erro": "\033[91m", "info": "\033[94m", "fim": "\033[0m"}
+    print(f"{cores.get(tipo, '')}{mensagem}{cores['fim']}")
+    getattr(logging, "info" if tipo != "erro" else "error")(mensagem)
 
 def localizar_chrome():
-    """Localiza o caminho do Google Chrome automaticamente."""
-    chrome_path = shutil.which("chrome")
-    if not chrome_path:
-        # Caminho padrão no Windows, caso o sistema não encontre
-        chrome_path = "C:/Program Files/Google/Chrome/Application/chrome.exe"
-    return chrome_path
-
+    caminho = shutil.which("chrome")
+    if not caminho:
+        caminho = r"C:\Program Files\Google\Chrome\Application\chrome.exe"
+    return caminho if os.path.exists(caminho) else None
 
 def abrir_chrome():
-    """Abre o navegador Google Chrome."""
+    """Abre o Chrome e espera carregar."""
     try:
         chrome_path = localizar_chrome()
-        subprocess.Popen([chrome_path])
-        time.sleep(5)  # Aguarda o navegador abrir completamente
-        notificar_usuario("Navegador Chrome aberto com sucesso.")
+        if not chrome_path:
+            raise FileNotFoundError("Chrome não encontrado.")
+        subprocess.Popen([chrome_path, "--new-window", "--start-maximized"])
+        time.sleep(8)  # tempo maior para carregamento total
+        logar("Chrome aberto com sucesso.", "ok")
         return True
     except Exception as e:
-        logging.error(f"Erro ao abrir o Chrome: {e}")
+        logging.error(f"Erro ao abrir o Chrome: {e}", exc_info=True)
         return False
 
+def esperar_img(img, timeout=15, conf=0.8):
+    """Espera até encontrar uma imagem na tela."""
+    inicio = time.time()
+    while time.time() - inicio < timeout:
+        pos = pyautogui.locateCenterOnScreen(img, confidence=conf)
+        if pos:
+            return pos
+        time.sleep(1)
+    return None
+
+def detectar_erro():
+    """Verifica se a tela de erro do YouTube está visível."""
+    erro = pyautogui.locateOnScreen('erro_macaco.png', confidence=0.8)
+    return erro is not None
 
 def realizar_pesquisa(url):
-    """Abre uma nova aba e acessa a URL informada."""
+    """Abre uma nova aba e acessa o vídeo."""
     try:
-        pyautogui.hotkey('ctrl', 't')  # Abre nova aba
-        time.sleep(TEMPO_ESPERA)
-        pyautogui.write(url)
+        pyautogui.hotkey('ctrl', 't')
+        time.sleep(2)
+        pyautogui.hotkey('ctrl', 'l')  # garante foco na barra
+        time.sleep(1)
+        pyautogui.write(url, interval=0.05)
         pyautogui.press('enter')
-        notificar_usuario(f"Acessando: {url}")
-        time.sleep(10)  # Aguarda o carregamento da página
+        logar(f"Acessando: {url}", "info")
 
-        # Tentativa de clicar no botão de play (opcional)
-        # Para funcionar, salve uma imagem "play_button.png" do botão de play.
-        play_button = pyautogui.locateCenterOnScreen('play_button.png', confidence=0.7)
-        if play_button:
-            pyautogui.click(play_button)
-            notificar_usuario("Botão de play identificado e clicado.")
+        # Espera o carregamento inicial
+        time.sleep(10)
+
+        # Se detectar erro do macaco → tenta recarregar até 3x
+        for tentativa in range(3):
+            if detectar_erro():
+                logar("⚠️ Página de erro detectada. Recarregando...", "erro")
+                pyautogui.hotkey('ctrl', 'r')
+                time.sleep(10)
+            else:
+                break
         else:
-            # Fallback: clica no centro da tela (ajustável)
-            pyautogui.click(900, 500)
-            notificar_usuario("Clicado no centro da tela (play provável).")
+            logar("❌ Erro persistente ao carregar o vídeo.", "erro")
+            return False
 
-    except Exception as e:
-        logging.error(f"Erro ao realizar a pesquisa: {e}")
+        # Tenta localizar o botão de play
+        play = esperar_img('play_button.png', timeout=12, conf=0.7)
+        if play:
+            pyautogui.moveTo(play, duration=random.uniform(0.4, 0.8))
+            pyautogui.click()
+            logar("Botão de play clicado com sucesso.", "ok")
+        else:
+            # Clica no centro da tela caso não ache a imagem
+            w, h = pyautogui.size()
+            pyautogui.click(w // 2, h // 2)
+            logar("Botão de play não encontrado, clicando no centro.", "info")
 
+        return True
 
-def minimizar_navegador():
-    """Minimiza todas as janelas do navegador."""
+    except Exception:
+        logging.error("Erro ao realizar pesquisa", exc_info=True)
+        return False
+
+def minimizar():
     try:
         pyautogui.hotkey('win', 'd')
-        notificar_usuario("Navegador minimizado.")
-    except Exception as e:
-        logging.error(f"Erro ao minimizar o navegador: {e}")
+        logar("Navegador minimizado.", "info")
+    except Exception:
+        logging.error("Erro ao minimizar navegador", exc_info=True)
 
-
-def fechar_navegador():
-    """Fecha todas as janelas do Chrome."""
+def fechar_chrome():
     try:
-        os.system("taskkill /IM chrome.exe /F")
-        notificar_usuario("Navegador Chrome fechado com sucesso.")
-    except Exception as e:
-        logging.error(f"Erro ao fechar o navegador: {e}")
+        os.system("taskkill /IM chrome.exe /F >nul 2>&1")
+        logar("Chrome fechado com sucesso.", "ok")
+    except Exception:
+        logging.error("Erro ao fechar navegador", exc_info=True)
 
-
-def solicitar_duracao_video():
-    """Solicita ao usuário a duração do vídeo (em segundos)."""
+def solicitar_duracao():
     try:
-        # Evita usar input() se o script estiver empacotado (.exe)
         if sys.stdin.isatty():
-            duration_str = input('Insira a duração do vídeo em segundos (padrão 300): ')
+            tempo = input("Duração do vídeo em segundos (padrão 300): ")
         else:
-            duration_str = ""
-        return int(duration_str) if duration_str else 300
-    except Exception as e:
-        logging.error(f"Erro ao solicitar duração: {e}")
+            tempo = ""
+        return int(tempo) if tempo else 300
+    except Exception:
         return 300
-
 
 # ===========================================
 # EXECUÇÃO PRINCIPAL
 # ===========================================
 
-def executar_automacao(num_videos=5):
-    """Executa o processo de assistir vídeos automaticamente."""
-    video_duration = solicitar_duracao_video()
-    notificar_usuario('Iniciando automação de visualização de vídeos...')
+def executar_automacao(num_videos=3):
+    duracao = solicitar_duracao()
+    logar("Iniciando automação de vídeos...", "ok")
 
-    # Abre o Chrome uma única vez e assiste vários vídeos
     if abrir_chrome():
         try:
             for i in range(num_videos):
-                video_url = random.choice(videos)
-                notificar_usuario(f"Iniciando vídeo {i+1}/{num_videos}: {video_url}")
-                realizar_pesquisa(video_url)
-                time.sleep(video_duration)  # Aguarda a duração simulada do vídeo
-                minimizar_navegador()
-                time.sleep(3)  # Pausa entre vídeos
-        except pyautogui.FailSafeException:
-            notificar_usuario("Automação interrompida manualmente (fail-safe).")
-        except Exception as e:
-            logging.error(f"Erro durante a automação: {e}")
-        finally:
-            fechar_navegador()
-            notificar_usuario("Automação finalizada.")
-    else:
-        logging.error("Falha ao iniciar o Chrome.")
+                url = random.choice(videos)
+                logar(f"🎬 Iniciando vídeo {i+1}/{num_videos}", "info")
 
+                if realizar_pesquisa(url):
+                    tempo_assistir = duracao + random.randint(-5, 5)
+                    logar(f"Aguardando {tempo_assistir}s de reprodução...", "info")
+                    time.sleep(tempo_assistir)
+                else:
+                    logar("Falha ao carregar o vídeo, pulando.", "erro")
+
+                minimizar()
+                time.sleep(random.uniform(3, 6))
+
+        except pyautogui.FailSafeException:
+            logar("⚠️ Automação interrompida manualmente.", "erro")
+        finally:
+            fechar_chrome()
+            logar("Automação concluída.", "ok")
+    else:
+        logar("Falha ao abrir o Chrome.", "erro")
 
 # ===========================================
 # PONTO DE ENTRADA
