@@ -103,4 +103,13 @@ entry_duracao = tk.Entry(janela, width=10)
 entry_duracao.insert(0, "60")
 entry_duracao.pack()
 
-tk.Button(janela, text="Iniciar Automação", font=("Arial", 12, "bold"), bg="#E66000", fg="w
+tk.Button(janela, text="Iniciar Automação", font=("Arial", 12, "bold"), bg="#E66000", fg="white",
+          width=25, command=assistir_videos).pack(pady=20)
+
+tk.Label(janela, text="Dica: Mova o mouse para o canto superior esquerdo para parar.",
+         font=("Arial", 8), fg="gray").pack(pady=10)
+
+tk.Label(janela, text="Criado com ❤️ usando PyAutoGUI + Tkinter",
+         font=("Arial", 8), fg="gray").pack(side="bottom", pady=5)
+
+janela.mainloop()
